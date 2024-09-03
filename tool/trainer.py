@@ -71,7 +71,7 @@ def build_training_trainer(args: argparse.Namespace, cfg: DictConfig) -> tuple[p
             monitor=cfg.TRAINER.CHECKPOINT.MONITOR,
             save_last=True,
             save_top_k=3,
-            mode="min" if "loss" in cfg.TRAINER.CHECKPOINT.MONITOR else "max",
+            mode=cfg.TRAINER.CHECKPOINT.MONITOR_MODE,
             every_n_epochs=1,
         ))
     if cfg.TRAINER.PROFILER is not None:
