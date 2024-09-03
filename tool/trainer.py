@@ -51,16 +51,17 @@ def build_training_trainer(args: argparse.Namespace, cfg: DictConfig) -> tuple[p
     ]
     if cfg.TRAINER.CHECKPOINT.MONITOR is not None:
         assert str(cfg.TRAINER.CHECKPOINT.MONITOR).find('/') == -1, "Monitor should not contain `/`"
-        filename = "{epoch}-{" + cfg.TRAINER.CHECKPOINT.MONITOR + ":.4g}"
+        filename = "{step}-{" + cfg.TRAINER.CHECKPOINT.MONITOR + ":.4g}"
     else:
-        filename = "{epoch}"
+        filename = "{step}"
     callbacks.append(ModelCheckpoint(
         dirpath=output_dir.joinpath("regular_ckpts"),
         filename=filename,
-        monitor="epoch",
+        monitor="step",
         save_top_k=5,
         mode="max",
-        every_n_epochs=cfg.TRAINER.CHECKPOINT.EVERY_N_EPOCHS,
+        # every_n_epochs=cfg.TRAINER.CHECKPOINT.EVERY_N_EPOCHS,
+        every_n_train_steps=cfg.TRAINER.CHECKPOINT.EVERY_N_TRAIN_STEPS,
     ))
 
     if cfg.TRAINER.CHECKPOINT.SAVE_BEST:
